@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdbool.h>
+#include <math.h>
 
 int const INT_MAX = 2147483647;
 
@@ -38,7 +39,9 @@ void multiples(int num, int res[]){
 
 bool check_for_composite(int num){
     if (num > 3){
-        for (int i = 2; i <= num/2; i++){
+        if (num % 2 == 0) return true;
+        int sqrt_num = sqrt(num);
+        for (int i = 3; i <= sqrt_num; i+=2){
             if (num % i == 0) return true;
         }
     }
@@ -64,13 +67,12 @@ void split_num(char* argv, char res[], int str_len){
 }
 
 void exponentiation(int num, long long tab[][10]){
-    for (int i = 1; i <= num; i++){
-        for (int j = 1; j <= 10; j ++){
-            long long res_num = j;
-            for (int k = 1; k <= i-1; k++){
-                res_num = res_num * j;
-            }
-            tab[i-1][j-1] = res_num;
+    for (int i = 1; i <= 10; i++){
+        long long res_num = i;
+        tab[0][i-1] = res_num;
+        for (int j = 2; j <= num; j ++){
+            res_num *= i;
+            tab[j-1][i-1] = res_num;
         }
     }
 }
