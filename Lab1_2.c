@@ -14,18 +14,30 @@
 //0,57 72 15 66 49 01 53 28 60 60
 
 int check_parameters(int argc, char* argv[]) {
-    if (argc != 3 || (argv[2][0] != '-')) return -1;
-    if (argv[2][2]) return -2;
-    if (argv[1][5]) return -3;
+    if (argc != 3 || (argv[2][0] != '-')) {
+        return -1;
+    }
+    if (argv[2][2]) {
+        return -2;
+    }
+    if (argv[1][5]) {
+        return -3;
+    }
     if (argv[1][0] != '1' || (argv[1][1] != 'E' && argv[1][1] != 'e') 
         || argv[1][2] != '-' || argv[1][3] < '0' || argv[1][3] > '9'
-        || (argv[1][4] && (argv[1][4] < '0' || argv[1][4] > '9'))) return -4;
+        || (argv[1][4] && (argv[1][4] < '0' || argv[1][4] > '9'))) {
+        return -4;
+    }
 }
 
 int check_degree(char* argv[]) {
     int degree = argv[1][3] - '0';
-    if (argv[1][4] != 0) degree = degree * 10 + argv[1][4] - '0';
-    if (degree > 16) return -5;
+    if (argv[1][4] != 0) {
+        degree = degree * 10 + argv[1][4] - '0';
+    }
+    if (degree > 16) {
+        return -5;
+    }
     return degree;
 }
 
@@ -43,11 +55,15 @@ double e_limit(double EPS) {
 double e_row(double EPS) {
     double sum = 0, prev_sum = -1;
     unsigned long long factorial_n = 1;
-    for (int n = 0; n <= 20; n++){
+    for (int n = 0; n <= 20; n++) {
         factorial_n *= n;
-        if (n == 0) factorial_n = 1;
+        if (n == 0) {
+            factorial_n = 1;
+        }
         sum = sum + 1.0 / (factorial_n);
-        if (sum - prev_sum < EPS) break;
+        if (sum - prev_sum < EPS) {
+            break;
+        }
         prev_sum = sum;
     }
     return sum;
@@ -197,7 +213,7 @@ double euler_const_row(double EPS) {
     double PI = 3.14159265358979323846;
     double sum = -pow(PI, 2) / 6, prev_sum, root;
     int k = 2, whole_part, zero_difference;
-    do{
+    do {
         prev_sum = sum;
         whole_part = sqrt(k);
         if (sqrt(k) == whole_part){
@@ -213,10 +229,14 @@ double euler_const_row(double EPS) {
 
 bool check_for_composite(int num) {
     if (num > 3){
-        if (num % 2 == 0) return true;
+        if (num % 2 == 0) {
+            return true;
+        }
         int sqrt_num = sqrt(num);
         for (int i = 3; i <= sqrt_num; i += 2){
-            if (num % i == 0) return true;
+            if (num % i == 0) {
+                return true;
+            }
         }
     }
     return false;
@@ -227,9 +247,9 @@ double euler_const_equation(double EPS) {
     double equation = log(2) * 0.5, prev_equation, composition = 0.5;
     do {
         prev_equation = equation;
-        do{
+        do {
             prime++;
-        }while(check_for_composite(prime));
+        } while (check_for_composite(prime));
         composition *= (prime - 1.0) / prime;
         equation = log(prime) * composition;
     } while (fabs(equation - prev_equation) >= EPS);
@@ -287,7 +307,9 @@ int main(int argc, char* argv[]) {
             double pi; 
             pi = pi_limit(EPS_2); //15
             printf("Pi = %.16f", pi);
-            if (small_EPS) printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            if (small_EPS) {
+                printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            }
             printf("\n");
 
             pi = pi_row(EPS); //16
@@ -295,7 +317,9 @@ int main(int argc, char* argv[]) {
 
             pi = pi_equation(EPS_2); //15
             printf("Pi = %.16f", pi);
-            if (small_EPS) printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            if (small_EPS) {
+                printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            }
             printf("\n");
 
             break;
@@ -311,7 +335,9 @@ int main(int argc, char* argv[]) {
             double ln_2;
             ln_2 = ln_2_limit(EPS_2); //15
             printf("ln2 = %.16f", ln_2);
-            if (small_EPS) printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            if (small_EPS) {
+                printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            }
             printf("\n");
 
             ln_2 = ln_2_row(EPS); //16
@@ -319,7 +345,9 @@ int main(int argc, char* argv[]) {
 
             ln_2 = ln_2_equation(EPS_2); //15
             printf("ln2 = %.16f", ln_2);
-            if (small_EPS) printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            if (small_EPS) {
+                printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            }
             printf("\n");
 
             break;
@@ -335,7 +363,9 @@ int main(int argc, char* argv[]) {
             double root_2;
             root_2 = root_2_limit(EPS_2); //15
             printf("2^0.5 = %.16f", root_2);
-            if (small_EPS) printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            if (small_EPS) {
+                printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            }
             printf("\n");
 
             root_2 = root_2_composition(EPS); //16
@@ -343,7 +373,9 @@ int main(int argc, char* argv[]) {
             
             root_2 = root_2_equation(EPS_2); //15
             printf("2^0.5 = %.16f", root_2);
-            if (small_EPS) printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            if (small_EPS) {
+                printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            }
             printf("\n");
 
             break;
@@ -359,7 +391,9 @@ int main(int argc, char* argv[]) {
             double euler_const;
             euler_const = euler_const_limit(EPS_2); //8
             printf("γ = %.16f", euler_const);
-            if (small_EPS) printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-8");
+            if (small_EPS) {
+                printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-8");
+            }
             printf("\n");
             small_EPS = 0;
 
@@ -369,7 +403,9 @@ int main(int argc, char* argv[]) {
             }
             euler_const = euler_const_row(EPS_2); //15
             printf("γ = %.16f", euler_const);
-            if (small_EPS) printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            if (small_EPS) {
+                printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-15");
+            }
             printf("\n");
 
             if (EPS < 1.0E-13){
@@ -378,7 +414,9 @@ int main(int argc, char* argv[]) {
             }
             euler_const = euler_const_equation(EPS_2); //13
             printf("γ = %.16f", euler_const);
-            if (small_EPS) printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-13");
+            if (small_EPS) {
+                printf("\tЗначение EPS было изменено на минимальное для этой функции: 1.0E-13");
+            }
             printf("\n");
 
             break;
