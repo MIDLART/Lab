@@ -20,6 +20,9 @@ int conversion_to_int(char* argv, int str_len)
     int num = 0;
     for(int i = 0; i < str_len; i++)
     {
+        if (i == 9 && INT_MAX / 10 < num) {
+            return -1;
+        }
         num = num * 10 + argv[i] - '0';
     }
     return num;
@@ -131,7 +134,7 @@ int main(int argc, char* argv[])
     {
         printf("Неверный ввод аргументов!\nСлишком длинный аргумент\n");
         return 1;
-    } else if (str_len < 10)
+    } else
     {
         for(int i = 0; i < str_len; i++)
         {
@@ -141,17 +144,13 @@ int main(int argc, char* argv[])
                 return 1;
             }
         }
-    } else 
-    {
-        long long long_num = conversion_to_int(argv[1], str_len - 1) * 10 + argv[1][str_len] - '0';
-        if(long_num > INT_MAX)
-        {
-            printf("Неверный ввод аргументов!\nВведённое число превышает INT_MAX\n");
-            return 1;
-        }
     }
 
     int num = conversion_to_int(argv[1], str_len);
+    if (num == -1) {
+        printf("Неверный ввод аргументов!\nВведённое число превышает INT_MAX\n");
+        return 1;
+    }
 
     switch (argv[2][1])
     {
