@@ -154,7 +154,8 @@ int main(int argc, char* argv[])
     }
 
     int num = conversion_to_int(argv[1], str_len);
-    if (num == -1) {
+    if (num == -1) 
+    {
         printf("Неверный ввод аргументов!\nВведённое число превышает INT_MAX\n");
         return 1;
     }
