@@ -260,24 +260,25 @@ int main(int argc, char* argv[]) {
     printf("М8О-213Б-22 Одинцов Артём Максимович\n");
 
     int check_res = check_parameters(argc, argv);
-    if (check_res == -1){
-        printf("Неверный ввод аргументов!\nВведите: эпсилон -флаг\n");
-        return 1;
-    } else if (check_res == -2) {
-        printf("Неверный ввод флага!\n");
-        return 1;
-    } else if (check_res == -3) {
-        printf("Неверный ввод аргумента!\nСлишком длинный аргумент\n");
-        return 1;
-    } else if (check_res == -4) {
-        printf("Неверный ввод аргумента!\nВведите эпсилон в виде: 1E-число\n");
-        return 1;
-    } else {
-        check_res = check_degree(argv);
-        if (check_res == -5){
-            printf("Неверный ввод аргумента!\nЭпсилон должен быть не меньше 1E-16\n");
+    switch (check_res){
+        case -1:
+            printf("Неверный ввод аргументов!\nВведите: эпсилон -флаг\n");
             return 1;
-        }
+        case -2:
+            printf("Неверный ввод флага!\n");
+            return 1;
+        case -3:
+            printf("Неверный ввод аргумента!\nСлишком длинный аргумент\n");
+            return 1;
+        case -4:
+            printf("Неверный ввод аргумента!\nВведите эпсилон в виде: 1E-число\n");
+            return 1;
+        default:
+            check_res = check_degree(argv);
+            if (check_res == -5){
+                printf("Неверный ввод аргумента!\nЭпсилон должен быть не меньше 1E-16\n");
+                return 1;
+            }
     }
     double EPS = pow(10, -check_res);
 
