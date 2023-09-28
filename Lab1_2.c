@@ -259,8 +259,8 @@ double euler_const_equation(double EPS) {
 int main(int argc, char* argv[]) {
     printf("М8О-213Б-22 Одинцов Артём Максимович\n");
 
-    int check_res = check_parameters(argc, argv);
-    switch (check_res){
+    int check_res;
+    switch (check_parameters(argc, argv)){
         case -1:
             printf("Неверный ввод аргументов!\nВведите: эпсилон -флаг\n");
             return 1;
