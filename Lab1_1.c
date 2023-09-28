@@ -20,8 +20,12 @@ int conversion_to_int(char* argv, int str_len)
     int num = 0;
     for(int i = 0; i < str_len; i++)
     {
-        if (i == 9 && INT_MAX / 10 < num) {
-            return -1;
+        if (i == 9) {
+            if (INT_MAX / 10 < num) {
+                return -1;
+            } else if (INT_MAX / 10 == num && argv[i] - '0' > 7) {
+                return -1;
+            }
         }
         num = num * 10 + argv[i] - '0';
     }
