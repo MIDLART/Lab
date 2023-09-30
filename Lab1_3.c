@@ -243,6 +243,10 @@ int main(int argc, char* argv[]){
 
     if (argv[1][1] == 'm') {
         int num_1, num_2;
+        if (argc != 4) {
+            printf("Неверный ввод аргументов!\n");
+            return 1;
+        }
         
         switch (flag_m(argv, &num_1, &num_2)) {
         case invalid_parameter:
