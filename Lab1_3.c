@@ -268,13 +268,13 @@ int main(int argc, char* argv[]){
 
         switch (flag_q_t(argc, argv, &EPS, &num_1, &num_2, &num_3)) {
         case invalid_parameter:
-            printf("Неверный ввод аргументов!\nВведите 3 числа\n");
+            printf("Неверный ввод аргументов!\nВведите 4 числа\n");
             break;
         case overflow:
             printf("Неверный ввод аргументов!\nВведённое число слишком длинное\n");
             break;
         case incorrect_EPS:
-            printf("Неверный ввод аргументов!\nВведите эпсилон от 1E-15 до 1\n");
+            printf("Неверный ввод аргументов!\nВведите эпсилон от 1E-15 до 1 в виде десятичной дроби\n");
             break;
         case ok: 
             if (argv[1][1] == 't'){
