@@ -44,7 +44,7 @@ double pop_front(List *list) {
 }
 
 int check_parameters(int argc, char* argv[]) {
-    if (argc < 4 || (argv[1][0] != '-' && argv[2][0] != '/')) {
+    if (argc < 4 || (argv[1][0] != '-' && argv[1][0] != '/')) {
         return -1;
     }
     if (argv[1][2]) {
