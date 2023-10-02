@@ -62,20 +62,19 @@ void latin_letters_in_line (FILE *input_file, FILE *output_file) {
 
 void other_characters_in_line (FILE *input_file, FILE *output_file) {
     char character;
-    int symbols = 0;
+    float symbols = 0;
     while ((character = fgetwc(input_file)) != EOF) {
         if (((character < '0' && character != ' ') || (character > '9' && character < 'A') ||
             (character > 'Z' && character < 'a') || character > 'z') && character != '\n') {
-                if (character > 127) {
-
+                if (character < 0) {
+                    symbols += 0.5;
                 } else {
-                symbols++;
-                printf("%c\n", character);
+                    symbols++;
                 }
         } 
 
         if (character == '\n') {
-            fprintf(output_file, "%d\n", symbols);
+            fprintf(output_file, "%.0f\n", symbols);
             symbols = 0;
         }
     }
