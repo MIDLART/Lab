@@ -38,7 +38,7 @@ status_code check_parameters (int argc, char* argv[]) {
 
         if (argv[i][len] != 't' || argv[i][len - 1] != 'x' || 
             argv[i][len - 2] != 't' || argv[i][len - 3] != '.') {
-            return invalid_extension;
+                return invalid_extension;
         }
     }
     return ok;
