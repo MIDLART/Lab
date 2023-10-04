@@ -32,7 +32,19 @@ int check_parameters (int argc, char* argv[]) {
         argv[2][len - 2] != 't' || argv[2][len - 3] != '.') {
         return -3;
     }
+    
+    if (argv[1][1] == 'n') {
+        int len = strlen(argv[3]) - 1;
 
+        if (len < 5) {
+            return -1;
+        } 
+
+        if (argv[3][len] != 't' || argv[3][len - 1] != 'x' || 
+            argv[3][len - 2] != 't' || argv[3][len - 3] != '.') {
+            return -3;
+        }
+    }
 }
 
 void delete_numbers (FILE *input_file, FILE *output_file) {
