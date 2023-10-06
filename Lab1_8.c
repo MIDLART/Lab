@@ -87,6 +87,9 @@ status_code number_system (char argv1[], char argv2[]) {
                     fputc(character, output_file);
                     character = fgetc(input_file);
         }
+        if (i > 256) {
+            return overflow;
+        }
         str[i] = '\0';
 
         if (min_num_system >= 'A') {
@@ -133,7 +136,7 @@ int main (int argc, char* argv[]) {
             return -1;
     }
 
-    if (number_system(argv[1], argv[2]) == not_open_file) {
+    if (number_system(argv[1], argv[2]) != ok) {
         printf("Ошибка!\n");
     } else {
         printf("Выполнение успешно\n");
