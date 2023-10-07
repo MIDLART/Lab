@@ -30,9 +30,13 @@ status_code check_parameters (int argc, char* argv[]) {
     return ok;
 }
 
-status_code conversion (char num[], int num_system, unsigned long long *decimal) {
-    unsigned long long res = 0;
-    int i = 0, cur;
+status_code conversion (char num[], int num_system, long long *decimal) {
+    long long res = 0;
+    int i, cur, otr = 0;
+    if (num[0] == '-') {
+        otr = 1;
+    }
+    i = otr;
     while (num[i] != '\0') {
         cur = num[i];
         if (cur >= 'A') {
@@ -44,6 +48,9 @@ status_code conversion (char num[], int num_system, unsigned long long *decimal)
         }
         res = res * num_system + cur;
         i++;
+    }
+    if (otr) {
+        res *= -1;
     }
     *decimal = res;
     return ok;
@@ -59,11 +66,17 @@ status_code number_system (char argv1[], char argv2[]) {
 
     char character, min_num_system = 0, str[256];
     int int_character, i = 0;
-    unsigned long long decimal;
+    long long decimal;
     while (character != EOF) {
         while ((character = fgetc(input_file)) == ' ' ||
                 character == '\t' || character == '\n');
 
+        if (character == '-') {
+            str[0] = character;
+            i++;
+            fputc(character, output_file);
+            character = fgetc(input_file);
+        }
         while (character == '0') {
             character = fgetc(input_file);
         }
@@ -103,7 +116,7 @@ status_code number_system (char argv1[], char argv2[]) {
             fprintf(output_file, " %d ", min_num_system);
 
             if (conversion(str, min_num_system, &decimal) == ok) {
-                fprintf(output_file, "%llu", decimal);
+                fprintf(output_file, "%lld", decimal);
             } else {
                 fprintf(output_file, "Переполнение");
             }
