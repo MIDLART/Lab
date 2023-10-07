@@ -28,7 +28,7 @@ status_code check_parameters (int argc, char* argv[], int res[]) {
             return overflow;
         }
         for(int i = otr; i < strlen(argv[j]); i++) {
-            if (argv[j][i] < '0' || argv[1][j] > '9') {
+            if (argv[j][i] < '0' || argv[j][i] > '9') {
                 return invalid_arguments;
             }
             if (i == (9 + otr)) {
