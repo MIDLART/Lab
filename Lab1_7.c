@@ -149,15 +149,15 @@ int main (int argc, char* argv[]) {
     switch (check_parameters(argc, argv)){
         case invalid_arguments:
             printf("Неверный ввод аргументов!\n");
-            return -1;
+            return invalid_arguments;
 
         case invalid_flag:
             printf("Неверный ввод флага!\n");
-            return -1;
+            return invalid_flag;
 
         case invalid_extension:
             printf("Файл должен иметь разрешение .txt\n");
-            return -1;
+            return invalid_extension;
     }
 
     switch (argv[1][1]) {
@@ -179,7 +179,7 @@ int main (int argc, char* argv[]) {
         
         default:
             printf("Неверный ввод флага!\n");
-            return -1;
+            return invalid_flag;
         }
 
     return 0;
