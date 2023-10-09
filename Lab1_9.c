@@ -11,7 +11,8 @@ int const arr_size = 20;
 typedef enum {
     ok,
     invalid_arguments,
-    overflow
+    overflow,
+    memory_not_allocated
 } status_code;
 
 status_code check_parameters (int argc, char* argv[], int res[]) {
@@ -25,10 +26,11 @@ status_code check_parameters (int argc, char* argv[], int res[]) {
         if (argv[j][0] == '-') {
             otr = 1;
         }
-        if (strlen(argv[j]) > (10 + otr)) {
+        size_t len = strlen(argv[j]);
+        if (len > (10 + otr)) {
             return overflow;
         }
-        for(int i = otr; i < strlen(argv[j]); i++) {
+        for(int i = otr; i < len; i++) {
             if (argv[j][i] < '0' || argv[j][i] > '9') {
                 return invalid_arguments;
             }
@@ -102,14 +104,14 @@ int main (int argc, char* argv[]) {
     printf("М8О-213Б-22 Одинцов Артём Максимович\n");
 
     int res[2];
-    switch (check_parameters(argc, argv, res)){
+    switch (check_parameters(argc, argv, res)) {
         case invalid_arguments:
             printf("Неверный ввод аргументов!\nВведите 2 целых числа\n");
-            return -1;
+            return invalid_arguments;
 
         case overflow:
             printf("Переполнение\n");
-            return -1;
+            return overflow;
     }
 
     int arr[arr_size];
@@ -129,22 +131,30 @@ int main (int argc, char* argv[]) {
     printf("\n2. ");
     int size = rand_size(10, 10000, 1);
     int* d_array_A = (int*)malloc(sizeof(int) * size);
+    if (d_array_A == NULL) {
+        printf("Ошибка! Не удалось выделить память\n");
+        return memory_not_allocated;
+    }
+
     int* d_array_C = (int*)malloc(sizeof(int) * size);
+    if (d_array_C == NULL) {
+        printf("Ошибка! Не удалось выделить память\n");
+        return memory_not_allocated;
+    }
 
     int size_2 = rand_size(10, 10000, 123);
     int* d_array_B = (int*)malloc(sizeof(int) * size_2);
-
-    if (!d_array_A || !d_array_B || !d_array_C) {
+    if (d_array_B == NULL) {
         printf("Ошибка! Не удалось выделить память\n");
-        return -1;
-    } else {
-        rand_arr(d_array_A, -1000, 1000, 1);
-        rand_arr(d_array_B, -1000, 1000, 24);
-
-        filling_array(d_array_A, d_array_B, d_array_C, size, size_2);
-
-        printf("Выполнение успешно\n");
+        return memory_not_allocated;
     }
+
+    rand_arr(d_array_A, -1000, 1000, 1);
+    rand_arr(d_array_B, -1000, 1000, 24);
+
+    filling_array(d_array_A, d_array_B, d_array_C, size, size_2);
+
+    printf("Выполнение успешно\n");
 
     printf("Первые 10 элементов динамичеких массивов\n");
     printf("A\tB\tC\n");
