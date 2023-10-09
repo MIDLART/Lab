@@ -5,6 +5,13 @@
 #include <math.h>
 #include <malloc.h>
 
+typedef enum {
+    ok,
+    overflow,
+    invalid_parameter,
+    incorrect_EPS
+} status;
+
 typedef struct node{
     double data;
     struct node *next;
@@ -14,8 +21,12 @@ typedef struct {
     node *head, *tail;
 } List;
 
+
 void push_back(List *list, double d) {
     node *new_node = (node*)malloc(sizeof(node));
+    if (new_node == NULL) {
+        return;
+    }
     new_node -> data = d;
     new_node -> next = NULL;
     if (list -> tail != NULL) {
@@ -67,27 +78,22 @@ int conversion_to_int(char* argv){
     return num;
 }
 
-typedef enum {
-    ok,
-    overflow,
-    invalid_parameter,
-    incorrect_EPS
-} status;
-
 status flag_m (char* argv[], int *res_1, int *res_2){
-    for(int i = 0; i < strlen(argv[2]); i++) {
+    size_t len = strlen(argv[2]);
+    for(int i = 0; i < len; i++) {
         if (argv[2][i] < '0' || argv[2][i] > '9') {
             return invalid_parameter;
         }
     }
-
-    for(int i = 0; i < strlen(argv[3]); i++) {
+    
+    size_t len_2 = strlen(argv[3]);
+    for(int i = 0; i < len_2; i++) {
         if (argv[3][i] < '0' || argv[3][i] > '9') {
             return invalid_parameter;
         }
     }
 
-    if (strlen(argv[2]) > 10 || strlen(argv[3]) > 10) {
+    if (len > 10 || len_2 > 10) {
         return overflow;
     } else {
         int num_1 = conversion_to_int(argv[2]);
@@ -114,7 +120,8 @@ double conversion_to_double(char* argv){
     }
 
     int point = 0;
-    for(int i = negative; i < strlen(argv); i++) {
+    size_t len = strlen(argv);
+    for(int i = negative; i < len; i++) {
         if (argv[i] == '.' || argv[i] == ',') {
             point = i;
         } else {
@@ -123,7 +130,7 @@ double conversion_to_double(char* argv){
     }
     
     if (point != 0) {
-        num /= pow(10, (strlen(argv) - 1 - point));
+        num /= pow(10, (len - 1 - point));
     }
     
     if (negative == 1) {
@@ -145,15 +152,16 @@ status flag_q_t (int argc, char* argv[], double *EPS,
             negative = 1;
         }
 
-        if (strlen(argv[j]) > 30){
+        size_t len = strlen(argv[j]);
+        if (len > 30){
             return overflow;
         }
 
         int point = 0;
-        for(int i = negative; i < strlen(argv[j]); i++) {
+        for(int i = negative; i < len; i++) {
             if (argv[j][i] < '0' || argv[j][i] > '9') {
                 if (argv[j][i] == '.' || argv[j][i] == ',' && 
-                    point == 0 && i != 0 && i != strlen(argv[j]) - 1) {
+                    point == 0 && i != 0 && i != len - 1) {
                     point = i;
                 } else {
                     return invalid_parameter;
@@ -310,7 +318,7 @@ int main(int argc, char* argv[]){
                     free(list);
                 } else {
                     printf("Ошибка! Не выделилась память\n");
-                    return 1;
+                    return -1;
                 }
             }
             break;
