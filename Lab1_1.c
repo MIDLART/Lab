@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <limits.h>
+#include <malloc.h>
 
 int string_length(char* argv)
 {
@@ -20,13 +21,10 @@ int conversion_to_int(char* argv, int str_len)
     int num = 0;
     for(int i = 0; i < str_len; i++)
     {
-        if (i == 9) 
-        {
-            if (INT_MAX / 10 < num) 
-            {
+        if (i == 9) {
+            if (INT_MAX / 10 < num) {
                 return -1;
-            } else if (INT_MAX / 10 == num && argv[i] - '0' > 7) 
-            {
+            } else if (INT_MAX / 10 == num && argv[i] - '0' > 7) {
                 return -1;
             }
         }
@@ -154,8 +152,7 @@ int main(int argc, char* argv[])
     }
 
     int num = conversion_to_int(argv[1], str_len);
-    if (num == -1) 
-    {
+    if (num == -1) {
         printf("Неверный ввод аргументов!\nВведённое число превышает INT_MAX\n");
         return 1;
     }
@@ -190,9 +187,14 @@ int main(int argc, char* argv[])
             break;
         case 's': 
         {
-            char res[2*str_len];
+            char* res = (char*)malloc(sizeof(char) * 2 * str_len);
+            if (res == NULL) {
+                printf("Ошибка! Не удалось выделить память\n");
+                return -1;
+            }
             split_num(argv[1], res, str_len);
             printf("%s\n", res);
+            free(res);
             break;
         }
         case 'e':
@@ -201,7 +203,7 @@ int main(int argc, char* argv[])
                 printf("Данная операция выполняется для чисел от 1 до 10\n");
             } else 
             {
-                long long tab[num][10];
+                long long tab[10][10];
                 exponentiation(num, tab);
                 printf("Степень\n");
                 for (int i = 0; i < num; i++)
