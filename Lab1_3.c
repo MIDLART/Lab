@@ -65,7 +65,8 @@ int check_parameters(int argc, char* argv[]) {
 
 int conversion_to_int(char* argv){
     int num = 0;
-    for(int i = 0; i < strlen(argv); i++) {
+    size_t len = strlen(argv);
+    for(int i = 0; i < len; i++) {
         if (i == 9) {
             if (INT_MAX / 10 < num) {
                 return -1;
