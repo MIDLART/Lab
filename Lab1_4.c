@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <malloc.h>
 
 int check_parameters (int argc, char* argv[]) {
     if (argv[1][0] != '-' && argv[1][0] != '/') {
@@ -32,7 +33,7 @@ int check_parameters (int argc, char* argv[]) {
         argv[2][len - 2] != 't' || argv[2][len - 3] != '.') {
         return -3;
     }
-    
+
     if (argv[1][1] == 'n') {
         int len = strlen(argv[3]) - 1;
 
@@ -77,7 +78,8 @@ void other_characters_in_line (FILE *input_file, FILE *output_file) {
     float symbols = 0;
     while ((character = fgetwc(input_file)) != EOF) {
         if (((character < '0' && character != ' ') || (character > '9' && character < 'A') ||
-            (character > 'Z' && character < 'a') || character > 'z') && character != '\n') {
+            (character > 'Z' && character < 'a') || character > 'z') && 
+            character != '\n' && character != '\t') {
                 if (character < 0) {
                     symbols += 0.5;
                 } else {
@@ -132,14 +134,18 @@ int main (int argc, char* argv[]){
         output_file = fopen(argv[3], "w");
     } else {
         int i = strlen(argv[2]) - 1;
-        char file_name[i + 6];
+        char* file_name = (char*)malloc(sizeof(char) * (i + 6));
+        if (file_name == NULL) {
+            printf("Ошибка! Не удалось выделить память\n");
+            return -1;
+        }
         file_name[i + 5] = '\0';
 
         while (argv[2][i] != 92 && i >= 0) { // 92 = '\' 
             file_name[i + 4] = argv[2][i];
             i--;
         }
-        
+
         file_name[i + 4] = '_';
         file_name[i + 3] = 't';
         file_name[i + 2] = 'u';
@@ -151,6 +157,8 @@ int main (int argc, char* argv[]){
         }
         
         output_file = fopen(file_name, "w");
+
+        free(file_name);
     }
 
     if (output_file == NULL) {
