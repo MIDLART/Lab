@@ -30,7 +30,7 @@ status_code check_parameters (int argc, char* argv[]) {
     }
 
     for (int i = 2; i <= files + 1; i++) {
-        int len = strlen(argv[i]) - 1;
+        size_t len = strlen(argv[i]) - 1;
 
         if (len < 5) {
             return invalid_arguments;
