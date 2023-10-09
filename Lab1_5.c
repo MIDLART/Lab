@@ -6,25 +6,29 @@
 
 typedef enum {
     ok,
-    overflow
+    overflow,
+    invalid_parameter,
+    invalid_flag,
+    invalid_eps,
+    invalid_x
 } status_code;
 
-int check_parameters(int argc, char* argv[]) {
+status_code check_parameters(int argc, char* argv[]) {
     if (argc != 4 || (argv[3][0] != '-')) {
-        return -1;
+        return invalid_parameter;
     }
     if (argv[3][2] || !argv[3][1]) {
-        return -2;
+        return invalid_flag;
     }
 
     double EPS = strtod(argv[1], NULL);
     if (EPS < 1E-15) {
-        return -3;
+        return invalid_eps;
     }
 
     double x = strtod(argv[2], NULL);
     if (!x && argv[2][0] != '0') {
-        return -4;
+        return invalid_x;
     }
 }
 
@@ -111,21 +115,21 @@ int main(int argc, char* argv[]) {
     printf("М8О-213Б-22 Одинцов Артём Максимович\n");
 
     switch (check_parameters(argc, argv)){
-        case -1:
+        case invalid_parameter:
             printf("Неверный ввод аргументов!\nВведите EPS x -ключ\n");
-            return -1;
+            return invalid_parameter;
 
-        case -2:
+        case invalid_flag:
             printf("Неверный ввод флага!\n");
-            return -1;
+            return invalid_flag;
 
-        case -3:
+        case invalid_eps:
             printf("Неверный ввод EPS\n");
-            return -1;
+            return invalid_eps;
 
-        case -4:
+        case invalid_x:
             printf("Неверный ввод x\n");
-            return -1;
+            return invalid_x;
     }
     double EPS = strtod(argv[1], NULL);
     double x = strtod(argv[2], NULL);
