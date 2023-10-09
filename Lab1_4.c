@@ -23,7 +23,7 @@ int check_parameters (int argc, char* argv[]) {
         }
     }
 
-    int len = strlen(argv[2]) - 1;
+    size_t len = strlen(argv[2]) - 1;
 
     if (len < 5) {
         return -1;
@@ -35,7 +35,7 @@ int check_parameters (int argc, char* argv[]) {
     }
 
     if (argv[1][1] == 'n') {
-        int len = strlen(argv[3]) - 1;
+        size_t len = strlen(argv[3]) - 1;
 
         if (len < 5) {
             return -1;
@@ -133,7 +133,7 @@ int main (int argc, char* argv[]){
     if (argv[1][1] == 'n') {
         output_file = fopen(argv[3], "w");
     } else {
-        int i = strlen(argv[2]) - 1;
+        size_t i = strlen(argv[2]) - 1;
         char* file_name = (char*)malloc(sizeof(char) * (i + 6));
         if (file_name == NULL) {
             printf("Ошибка! Не удалось выделить память\n");
