@@ -16,7 +16,7 @@ status_code check_parameters (int argc, char* argv[]) {
     }
 
     for (int i = 1; i <= 2; i++) {
-        int len = strlen(argv[i]) - 1;
+        size_t len = strlen(argv[i]) - 1;
 
         if (len < 5) {
             return invalid_arguments;
@@ -87,6 +87,10 @@ status_code number_system (char argv1[], char argv2[]) {
 
         while (character != EOF && character != ' ' &&
                 character != '\t' && character != '\n') {
+                    if (isdigit(character) != 0 && isalpha(character) != 0) {
+                        return invalid_arguments;
+                    }
+                    
                     if (character >= 'a' && character <= 'z') {
                         character -= 32;
                     }
@@ -142,15 +146,16 @@ int main (int argc, char* argv[]) {
     switch (check_parameters(argc, argv)){
         case invalid_arguments:
             printf("Неверный ввод аргументов!\n");
-            return -1;
+            return invalid_arguments;
 
         case invalid_extension:
             printf("Файл должен иметь разрешение .txt\n");
-            return -1;
+            return invalid_extension;
     }
 
     if (number_system(argv[1], argv[2]) != ok) {
         printf("Ошибка!\n");
+        return invalid_arguments;
     } else {
         printf("Выполнение успешно\n");
     }
