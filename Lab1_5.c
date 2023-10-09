@@ -4,6 +4,11 @@
 #include <math.h>
 #include <limits.h>
 
+typedef enum {
+    ok,
+    overflow
+} status_code;
+
 int check_parameters(int argc, char* argv[]) {
     if (argc != 4 || (argv[3][0] != '-')) {
         return -1;
@@ -22,11 +27,6 @@ int check_parameters(int argc, char* argv[]) {
         return -4;
     }
 }
-
-typedef enum {
-    ok,
-    overflow
-} status_code;
 
 status_code sum_a (double EPS, double x, double *res) {
     double sum = 1, cur = 1;
