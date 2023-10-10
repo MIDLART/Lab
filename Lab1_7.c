@@ -10,6 +10,9 @@ typedef enum {
 } status_code;
 
 status_code check_parameters (int argc, char* argv[]) {
+    if (argc < 4) {
+        return invalid_arguments;
+    }
     if (argv[1][0] != '-' && argv[1][0] != '/' || argv[1][2]) {
         return invalid_arguments;
     }
