@@ -6,7 +6,6 @@
 typedef enum {
     ok,
     invalid_arguments,
-    invalid_extension,
     not_open_file,
     overflow
 } status_code;
@@ -22,11 +21,6 @@ status_code check_parameters (int argc, char* argv[]) {
         if (len < 5) {
             return invalid_arguments;
         } 
-        //txt
-        if (argv[i][len] != 't' || argv[i][len - 1] != 'x' || 
-            argv[i][len - 2] != 't' || argv[i][len - 3] != '.') {
-            return invalid_extension;
-        }
     }
     return ok;
 }
@@ -148,14 +142,9 @@ status_code number_system (char argv1[], char argv2[]) {
 int main (int argc, char* argv[]) {
     printf("М8О-213Б-22 Одинцов Артём Максимович\n");
 
-    switch (check_parameters(argc, argv)){
-        case invalid_arguments:
-            printf("Неверный ввод аргументов!\n");
-            return invalid_arguments;
-
-        case invalid_extension:
-            printf("Файл должен иметь разрешение .txt\n");
-            return invalid_extension;
+    if (check_parameters(argc, argv) == invalid_arguments){
+        printf("Неверный ввод аргументов!\n");
+        return invalid_arguments;
     }
 
     if (number_system(argv[1], argv[2]) != ok) {
