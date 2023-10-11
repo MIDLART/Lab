@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
+#include <ctype.h>
 
 typedef enum {
     ok,
@@ -21,7 +22,7 @@ status_code check_parameters (int argc, char* argv[]) {
         if (len < 5) {
             return invalid_arguments;
         } 
-
+        //txt
         if (argv[i][len] != 't' || argv[i][len - 1] != 'x' || 
             argv[i][len - 2] != 't' || argv[i][len - 3] != '.') {
             return invalid_extension;
@@ -65,11 +66,15 @@ status_code number_system (char argv1[], char argv2[]) {
     }
 
     char character, min_num_system = 0, str[256];
-    int int_character, i = 0;
+    int int_character, i = 0, flag_no_file = 1;
     long long decimal;
     while (character != EOF) {
         while ((character = fgetc(input_file)) == ' ' ||
                 character == '\t' || character == '\n');
+                
+        if(feof(input_file)) {
+            flag_no_file = 0;
+        }
 
         if (character == '-') {
             str[0] = character;
@@ -112,7 +117,7 @@ status_code number_system (char argv1[], char argv2[]) {
         if (min_num_system >= 'A') {
             min_num_system -= 7;
         }
-        if (min_num_system == 0) {
+        if (min_num_system == 0 && flag_no_file != 0) {
             fprintf(output_file, " 2 ");
             fputc('0', output_file);
         } else {
