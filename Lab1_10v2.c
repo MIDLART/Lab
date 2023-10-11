@@ -43,8 +43,12 @@ status_code conv_to_dec (char num[], int num_system, long long *decimal) {
 }
 
 void conversion_10_to_system (long long num, int system, char *str_num) {
-    int i = 63;
+    int i = 64, otr = 0;
     char character;
+    if (num < 0) {
+        num *= -1;
+        otr = 1;
+    }
     while (num != 0) {
         character = num % system;
         if (character > 9) {
@@ -56,50 +60,66 @@ void conversion_10_to_system (long long num, int system, char *str_num) {
         num /= system;
         i--;
     }
+    if (otr) {
+        str_num[i] = '-';
+    }
 }
 
-status_code check_and_find_max (int *system, char max_mod[]) {
-    char end_of_input[] = "Stop", str_num[65];
-    str_num[64] = '\0';
+status_code check_and_find_max (int *system, char *max_mod) {
+    char end_of_input[] = "Stop", str_num[66];
+    str_num[65] = '\0';
+    int i = 0, otr, flag_no_num = 1;
 
-    scanf("%65s", str_num);
+    if (scanf("%64s", &str_num) != 1) {
+        invalid_arguments;
+    }
+    
     while (strcmp(str_num, end_of_input) != 0) {
-        if (str_num[64] != '\0') {
+        flag_no_num = 0;
+
+        if (str_num[65] != '\0') {
             return overflow;
         }
 
-        int otr;
         errno = 0;
+        otr = 0;
+        i = 0;
 
         if (str_num[0] == '-') {
             otr = 1;
         }
 
-        for(int j = otr; j < 64; j++) {
+        for(int j = otr; j < 65; j++) {
             if (isdigit(str_num[j]) != 0 && isalpha(str_num[j]) != 0) {
                 return invalid_arguments;
             }
         }
 
-        if (strtoll(str_num, NULL, *system) > strtoll(max_mod, NULL, *system)) {
+        if (fabs(strtoll(str_num, NULL, *system)) > fabs(strtoll(max_mod, NULL, *system))) {
             strcpy(max_mod, str_num);
         } 
 
-        scanf("%65s", str_num);
+        if (scanf("%64s", &str_num) != 1) {
+            invalid_arguments;
+        }
     }
 
     if (errno == ERANGE) {
         return overflow;
     } 
 
+    if (flag_no_num) {
+        return invalid_arguments;
+    }
+
     return ok;
 }
 
-int main (int argc, char* argv[]) {
+int main () {
     printf("М8О-213Б-22 Одинцов Артём Максимович\n");
 
     int system = 0;
-    char max_mod[65];
+    char max_mod[66];
     long long decimal;
 
     printf("Введите основание системы\n");
@@ -122,21 +142,21 @@ int main (int argc, char* argv[]) {
             return overflow;
         
         default:
-            printf("Максимальное по модулю: %s\n", max_mod);
             break;
     }
 
     if (conv_to_dec(max_mod, system, &decimal) == overflow) {
-        printf("Переполнение\n");
+        printf("Переполнение\nПереполнение\n");
         return overflow;
     }
+    printf("Максимальное по модулю: %s\n", max_mod);
     printf("В десятичной системе: %lld\n", decimal);
 
-    char res_arry[65];
-    for (int i = 0; i < 64; i++) {
+    char res_arry[66];
+    for (int i = 0; i < 65; i++) {
         res_arry[i] = '0'; 
     }
-    res_arry[64] = '\0';
+    res_arry[65] = '\0';
 
     printf("Число в системах счисления с основаниями 36, 27, 18, 9\n");
     if (decimal == 0) {
@@ -147,6 +167,5 @@ int main (int argc, char* argv[]) {
             printf("%s\n", res_arry + strspn(res_arry, "0"));
         }
     } 
-
     return 0;
 }
