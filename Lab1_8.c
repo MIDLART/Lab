@@ -53,9 +53,12 @@ status_code conversion (char num[], int num_system, long long *decimal) {
 
 status_code number_system (char argv1[], char argv2[]) {
     FILE *input_file = fopen(argv1, "r");
+    if (input_file == NULL) {
+        return not_open_file;
+    }
     FILE *output_file = fopen(argv2, "w");
-
-    if (input_file == NULL || output_file == NULL) {
+    if (output_file == NULL) {
+        fclose(input_file);
         return not_open_file;
     }
 
