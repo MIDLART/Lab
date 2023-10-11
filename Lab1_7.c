@@ -5,7 +5,6 @@ typedef enum {
     ok,
     invalid_arguments,
     invalid_flag,
-    invalid_extension,
     not_open_file
 } status_code;
 
@@ -38,24 +37,27 @@ status_code check_parameters (int argc, char* argv[]) {
         if (len < 5) {
             return invalid_arguments;
         } 
-
-        if (argv[i][len] != 't' || argv[i][len - 1] != 'x' || 
-            argv[i][len - 2] != 't' || argv[i][len - 3] != '.') {
-                return invalid_extension;
-        }
     }
     return ok;
 }
 
 status_code flag_r (char argv1[], char argv2[], char argv3[]) {
     FILE *file1 = fopen(argv1, "r");
-    FILE *file2 = fopen(argv2, "r");
-    FILE *file3 = fopen(argv3, "w");
-
-    if (file1 == NULL || file2 == NULL || file3 == NULL) {
+    if(file1 == NULL) {
         return not_open_file;
     }
-
+    FILE *file2 = fopen(argv2, "r");
+    if(file1 == NULL) {
+        fclose(file1);
+        return not_open_file;
+    }
+    FILE *file3 = fopen(argv3, "w");
+    if(file1 == NULL) {
+        fclose(file1);
+        fclose(file2);
+        return not_open_file;
+    }
+    
     char character_1, character_2;
     while (character_1 != EOF || character_2 != EOF) {
         if (character_1 != EOF) {
@@ -105,9 +107,12 @@ int conversion_10_to_4 (int num) {
 
 status_code flag_a (char argv1[], char argv2[]) {
     FILE *input_file = fopen(argv1, "r");
+    if (input_file == NULL) {
+        return not_open_file;
+    }
     FILE *output_file = fopen(argv2, "w");
-
-    if (input_file == NULL || output_file == NULL) {
+    if (output_file == NULL) {
+        fclose(input_file);
         return not_open_file;
     }
 
@@ -157,10 +162,6 @@ int main (int argc, char* argv[]) {
         case invalid_flag:
             printf("Неверный ввод флага!\n");
             return invalid_flag;
-
-        case invalid_extension:
-            printf("Файл должен иметь разрешение .txt\n");
-            return invalid_extension;
     }
 
     switch (argv[1][1]) {
