@@ -10,7 +10,8 @@ typedef enum {
     ok,
     invalid_arguments,
     overflow,
-    wrong_system
+    wrong_system,
+    max_is_zero
 } status_code;
 
 status_code conv_to_dec (char num[], int num_system, long long *decimal) {
@@ -80,6 +81,9 @@ status_code check_and_find_max (int *system, char *max_mod) {
         if (str_num[65] != '\0') {
             return overflow;
         }
+        if (strcmp(str_num, "0") == 0){
+            strcpy(max_mod, "0");
+        }
 
         errno = 0;
         otr = 0;
@@ -140,10 +144,16 @@ int main () {
         case overflow:
             printf("Переполнение\n");
             return overflow;
+
+        case max_is_zero:
+            max_mod[0] = '0';
+            max_mod[1] = '\0';
+            break;;
         
         default:
             break;
     }
+    printf("Максимальное по модулю: %s\n", max_mod);
 
     if (conv_to_dec(max_mod, system, &decimal) == overflow) {
         printf("Переполнение\nПереполнение\n");
