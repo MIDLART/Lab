@@ -44,10 +44,6 @@ int check_parameters (int argc, char* argv[]) {
             return -1;
         } 
 
-        if (argv[3][len] != 't' || argv[3][len - 1] != 'x' || 
-            argv[3][len - 2] != 't' || argv[3][len - 3] != '.') {
-            return -3;
-        }
     }
 }
 
@@ -120,9 +116,6 @@ int main (int argc, char* argv[]){
             printf("Неверный ввод флага!\n");
             return -1;
 
-        case -3:
-            printf("Файл должен иметь разрешение .txt\n");
-            return -1;
     }
 
     FILE *input_file = fopen(argv[2], "r");
