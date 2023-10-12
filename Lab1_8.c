@@ -14,14 +14,6 @@ status_code check_parameters (int argc, char* argv[]) {
     if (argc != 3) {
         return invalid_arguments;
     }
-
-    for (int i = 1; i <= 2; i++) {
-        size_t len = strlen(argv[i]) - 1;
-
-        if (len < 5) {
-            return invalid_arguments;
-        } 
-    }
     return ok;
 }
 
