@@ -153,6 +153,7 @@ int main (int argc, char* argv[]){
     }
 
     if (output_file == NULL) {
+        fclose(input_file);
         printf("Не удалось открыть выходной файл!\n");
         return -1;
     }
