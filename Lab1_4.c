@@ -26,25 +26,6 @@ int check_parameters (int argc, char* argv[]) {
         }
     }
 
-    size_t len = strlen(argv[2]) - 1;
-
-    if (len < 5) {
-        return -1;
-    } 
-
-    if (argv[2][len] != 't' || argv[2][len - 1] != 'x' || 
-        argv[2][len - 2] != 't' || argv[2][len - 3] != '.') {
-        return -3;
-    }
-
-    if (argv[1][1] == 'n') {
-        size_t len = strlen(argv[3]) - 1;
-
-        if (len < 5) {
-            return -1;
-        } 
-
-    }
 }
 
 void delete_numbers (FILE *input_file, FILE *output_file) {
@@ -136,15 +117,15 @@ int main (int argc, char* argv[]){
             return -1;
         }
 
-        size_t index_current = strlen(argv[2]) - 1;
+        size_t index_current = file_name_size - 1;
        
-        memcpy(file_name, argv[2], sizeof(char)*index_current);
-        file_name[file_name_size + 5] = '\0';
+        memcpy(file_name, argv[2], sizeof(char) * index_current);
+        file_name[index_current + 5] = '\0';
         while (argv[2][index_current] != 92 && index_current >= 0) { // 92 = '\' 
             file_name[index_current + 4] = argv[2][index_current];
             index_current--;
         }
-        memcpy(file_name + strlen(file_name) + 2 - index_current, "out_", sizeof(char) * 4);
+        memcpy(file_name + index_current + 1, "out_", sizeof(char) * 4);
 
         printf("%s\n", file_name);
         
