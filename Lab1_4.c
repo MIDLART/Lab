@@ -3,6 +3,9 @@
 #include <malloc.h>
 
 int check_parameters (int argc, char* argv[]) {
+    if (argc < 3) {
+        return -1;
+    }
     if (argv[1][0] != '-' && argv[1][0] != '/') {
         return -1;
     }
@@ -133,31 +136,26 @@ int main (int argc, char* argv[]){
     if (argv[1][1] == 'n') {
         output_file = fopen(argv[3], "w");
     } else {
-        size_t i = strlen(argv[2]) - 1;
-        char* file_name = (char*)malloc(sizeof(char) * (i + 6));
-        if (file_name == NULL) {
-            printf("Ошибка! Не удалось выделить память\n");
+        size_t file_name_size = strlen(argv[2]);
+        char* file_name = (char*)malloc(sizeof(char)*(file_name_size + 5));
+        if(file_name == NULL) {
+            printf("Ошибка выделения памяти\n");
             return -1;
         }
-        file_name[i + 5] = '\0';
 
-        while (argv[2][i] != 92 && i >= 0) { // 92 = '\' 
-            file_name[i + 4] = argv[2][i];
-            i--;
+        size_t index_current = strlen(argv[2]) - 1;
+       
+        memcpy(file_name, argv[2], sizeof(char)*index_current);
+        file_name[file_name_size + 5] = '\0';
+        while (argv[2][index_current] != 92 && index_current >= 0) { // 92 = '\' 
+            file_name[index_current + 4] = argv[2][index_current];
+            index_current--;
         }
+        memcpy(file_name + strlen(file_name) + 2 - index_current, "out_", sizeof(char) * 4);
 
-        file_name[i + 4] = '_';
-        file_name[i + 3] = 't';
-        file_name[i + 2] = 'u';
-        file_name[i + 1] = 'o';
-
-        while (i >= 0) {
-            file_name[i] = argv[2][i];
-            i--;
-        }
+        printf("%s\n", file_name);
         
         output_file = fopen(file_name, "w");
-
         free(file_name);
     }
 
