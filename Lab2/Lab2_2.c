@@ -20,30 +20,6 @@ status_code check_parameters (int argc, char* argv[]) {
     return ok;
 }
 
-/* status_code my_pow (double *res, double num, int degree) {
-    int otr = 0;
-    if (degree < 0) {
-        degree *= -1.0;
-        otr = 1;
-    }
-
-    while (degree) {
-        if (degree % 2 == 0) {
-            degree /= 2;
-            num *= num;
-        } else {
-            degree--;
-            *res *= num;
-        }
-    }
-
-    if (otr) {
-        *res = 1.0 / (*res);
-    }
-
-    return ok;
-} */
-
 status_code my_pow (double *res, double num, int degree) {
     int otr = 0;
     if (degree < 0) {
