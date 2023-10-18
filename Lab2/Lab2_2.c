@@ -21,12 +21,6 @@ status_code check_parameters (int argc, char* argv[]) {
 }
 
 status_code my_pow (double *res, double num, int degree) {
-    int otr = 0;
-    if (degree < 0) {
-        *res = 1.0 / my_pow(res, num, -degree);
-        return ok;
-    }
-
     if (degree == 0) {
         *res = 1.0;
         return ok;
@@ -37,6 +31,12 @@ status_code my_pow (double *res, double num, int degree) {
     }
 
     double req_step = 1.0;
+    if (degree < 0) {
+        my_pow(&req_step, num, -degree);
+        *res = 1.0 / req_step;
+        return ok;
+    }
+
     my_pow(&req_step, num, degree / 2);
     if (degree % 2 == 0) {
         *res = req_step * req_step;
