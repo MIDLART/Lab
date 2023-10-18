@@ -37,11 +37,12 @@ int string_length (char* str) {
 }
 
 status_code string_revers (char* str, char** revers) {
-    int size = string_length(str);
+    int size = string_length(str) + 1;
     *revers = (char*)malloc(sizeof(char) * size);
     if (revers == NULL) {
         return memory_not_allocated;
     }
+    (*revers)[size - 1] = '\0';
 
     for (int i = 0; i < size; i++) {
         (*revers)[i] = str[size - 1 - i];
