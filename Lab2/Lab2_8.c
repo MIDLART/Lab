@@ -139,17 +139,20 @@ status_code str_sum (char **res, int system, int n, ...) {
 
 int main () {
     char *res;
-    str_sum(&res, 10, 5, "999", "1", "1", "9999", "10");
-    printf("%s\n", res);
-    free(res);
+    if (str_sum(&res, 10, 5, "999", "1", "1", "9999", "10") == ok) {
+        printf("%s\n", res);
+        free(res);
+    }
 
-    str_sum(&res, 16, 3, "1", "b", "F");
-    printf("%s\n", res);
-    free(res);
+    if (str_sum(&res, 16, 3, "1", "b", "F") == ok) {
+        printf("%s\n", res);
+        free(res);
+    }
 
-    str_sum(&res, 36, 3, "PZ", "1", "F");
-    printf("%s\n", res);
-    free(res);
+    if (str_sum(&res, 36, 3, "PZ", "1", "F") == ok) {
+        printf("%s\n", res);
+        free(res);
+    }
 
     return ok;
 }
