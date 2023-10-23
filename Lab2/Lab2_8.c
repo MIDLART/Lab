@@ -42,14 +42,26 @@ char char_sum (int *next_digit, int system, char num_1, char num_2) {
 
 status_code column_addition(char **res, int system, char* num_1, char* num_2) {
     int size;
-    int len_1 = strlen(num_1), len_2 = strlen(num_2);
+    int len_1 = strlen(num_1), len_2 = strlen(num_2), tmp;
+    char *great, *less;
+
     if (len_1 > len_2) {
         size = len_1;
+        great = num_1;
+        less = num_2;
     } else {
         size = len_2;
+        great = num_2;
+        less = num_1;
     }
-    size += 1;
 
+    if (len_2 > len_1) {
+        tmp = len_1;
+        len_1 = len_2;
+        len_2 = tmp;
+    }
+
+    size += 1;
     char* sum = (char*)malloc(sizeof(char) * size);
     if (sum == NULL) {
         return memory_not_allocated;
@@ -60,28 +72,16 @@ status_code column_addition(char **res, int system, char* num_1, char* num_2) {
     int next_digit = 0;
     len_1--;
     len_2--;
-    if (len_1 > len_2) {
-        strcpy(sum, num_1);
-        for (; len_2 >= 0; len_2--) {
-            sum[len_1] = char_sum(&next_digit, system, sum[len_1], num_2[len_2]);
-            len_1--;
-        }
 
-        while (next_digit == 1 && len_1 >= 0) {
-            sum[len_1] = char_sum(&next_digit, system, sum[len_1], '0');
-            len_1 --;
-        }
-    } else {
-        strcpy(sum, num_2);
-        for (; len_1 >= 0; len_1--) {
-            sum[len_2] = char_sum(&next_digit, system, sum[len_2], num_1[len_1]);
-            len_2--;
-        }
+    strcpy(sum, great);
+    for (; len_2 >= 0; len_2--) {
+        sum[len_1] = char_sum(&next_digit, system, sum[len_1], less[len_2]);
+        len_1--;
+    }
 
-        while (next_digit == 1 && len_2 >= 0) {
-            sum[len_2] = char_sum(&next_digit, system, sum[len_2], '0');
-            len_2 --;
-        }
+    while (next_digit == 1 && len_1 >= 0) {
+        sum[len_1] = char_sum(&next_digit, system, sum[len_1], '0');
+        len_1 --;
     }
 
     if (next_digit == 1) {
