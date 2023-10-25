@@ -13,45 +13,38 @@ typedef enum {
 void print_info (int line, int symbol) {
     printf("Line № %d symbol № %d\n", line, symbol);
 }
-
 status_code substr_search (char* substr, FILE** file) {
-    char c;
+    char c, check_n;
     size_t len = strlen(substr);
-    int num_str = 1, place = 0, i, no_occur = 1; 
+    int num_str = 1, place = 0, i, no_occur = 1, flag = 0;
 
-    while ((c = fgetc(*file)) != EOF) {
+    while ((c = fgetc(*file)) != EOF && flag == 0) {
+        if (check_n == '\n') {
+            num_str++;
+            place = 0;
+        }
         i = 0;
+        check_n = c;
         while (c == substr[i] && i < len) {
             c = fgetc(*file);
             i++;
+
+            if (c == EOF) {
+                flag = 1;
+            }
+
         }
 
         if (i == len) {
             print_info(num_str, place);
             no_occur = 0;
-            if (substr[0] == '\n') {
-                num_str++;
-                place = -1;
-            }
         }
 
-        if (substr[1] == '\n') {
-            i--;
+        if (i >= 1) {
+            fseek(*file, -i, SEEK_CUR);
         }
 
-        if (i > 1) {
-            fseek(*file, -i + 1, SEEK_CUR);
-            place++;
-        } else if (i == 1) {
-            fseek(*file, -1, SEEK_CUR);
-        }
-
-        if (c == '\n') {
-            num_str++;
-            place = 0;
-        } else {
-            place++;
-        }
+        place++;
 
     }
 
@@ -86,7 +79,8 @@ status_code file_search (char* substr, ...) {
 }
 
 int main () {
-    file_search("c\na", "C:\\VSCode\\files\\mp_2\\test1.txt", 
+    //"c\na"
+    file_search("\nabc", "C:\\VSCode\\files\\mp_2\\test1.txt", 
                 "C:\\VSCode\\files\\mp_2\\test2.txt", "C:\\VSCode\\files\\mp_2\\test3.txt");
     return ok;
 }
