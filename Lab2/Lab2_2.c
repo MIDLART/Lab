@@ -47,7 +47,7 @@ status_code my_pow (double *res, double num, int degree) {
     return ok;
 }
 
-status_code geometric_mean (double *res, int quantity, ...) {
+status_code geometric_mean (double *res, int quantity, ...) { 
     double composition = 1.0;
     va_list ptr;
     va_start(ptr, quantity);
@@ -55,6 +55,14 @@ status_code geometric_mean (double *res, int quantity, ...) {
         composition *= va_arg(ptr, double);
     }
     va_end(ptr);
+    if (composition < 0.0) {
+        if ((quantity & 1)) {
+            *res = -pow(-composition, 1.0 / quantity);
+            return ok;
+        } else {
+            return invalid_arguments;
+        }
+    }
 
     *res = pow(composition, 1.0 / quantity);
     return ok;
@@ -74,7 +82,10 @@ int main (int argc, char* argv[]) {
     switch (argv[1][1]) {
         case '1': {
             double geom_mean;
-            geometric_mean(&geom_mean, 5, 5.0, 2.0, 5.0, 8.0, 9.0);
+            if (geometric_mean(&geom_mean, 3, -1.0, 1.0, 1.0) == invalid_arguments) {
+                printf("Invalid arguments\n");
+                return invalid_arguments;
+            }
             printf("%f\n", geom_mean);
             break;
         }
