@@ -100,6 +100,25 @@ status_code column_addition(char **res, int system, char* num_1, char* num_2) {
     }
 
     *res = sum;
+
+    int i = 0;
+    while ((*res)[i] == '0') {
+        i++;
+    }
+    
+    if (i != 0) {
+        for (int j = i; j < size; j++) {
+            (*res)[j - i] = (*res)[j];
+        }
+
+        size -= i;
+        char* tmp = (char*)realloc(*res, size);
+        if (tmp == NULL) {
+            free(*res);
+            return memory_not_allocated;
+        }
+        *res = tmp;
+    }
     return ok;
 }
 
@@ -139,7 +158,7 @@ status_code str_sum (char **res, int system, int n, ...) {
 
 int main () {
     char *res;
-    if (str_sum(&res, 10, 5, "999", "1", "1", "9999", "10") == ok) {
+    if (str_sum(&res, 10, 5, "00000", "0", "0", "00000000000000000000000000000", "10") == ok) {
         printf("%s\n", res);
         free(res);
     }
