@@ -61,16 +61,17 @@ int main () {
     unsigned int n = 123, degree;
 
     for (degree = 1; degree < 6; degree++) {
-        conversion(n, degree, &res);
+        if (conversion(n, degree, &res) == OK) {
 
-        for(int i = 0; i < 33; i++) {
-            if (res[i] != 0) {
-                printf("%c", res[i]);
+            for(int i = 0; i < 33; i++) {
+                if (res[i] != 0) {
+                    printf("%c", res[i]);
+                }
             }
-        }
-        printf("\n");
+            printf("\n");
 
-        free(res);
+            free(res);
+        }
     }
 
     return OK;
