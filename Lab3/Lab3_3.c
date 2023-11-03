@@ -205,6 +205,8 @@ int main (int argc, char* argv[]) {
     Vector vector;
     if (vector_init(&vector) == MEM_NOT_ALLOC) {
         printf("Memory was not allocated\n");
+        fclose(input_file);
+        fclose(output_file);
         return MEM_NOT_ALLOC;
     }
 
@@ -212,10 +214,14 @@ int main (int argc, char* argv[]) {
     if (er_check = read_info(input_file, &vector) == MEM_NOT_ALLOC) {
         printf("Memory was not allocated\n");
         del_vector(&vector);
+        fclose(input_file);
+        fclose(output_file);
         return MEM_NOT_ALLOC;
     } else if (er_check == INVALID_ARGUMENTS) {
         printf("Invalid input\n");
         del_vector(&vector);
+        fclose(input_file);
+        fclose(output_file);
         return INVALID_ARGUMENTS;
     }
 
