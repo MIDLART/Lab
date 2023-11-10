@@ -58,11 +58,20 @@ status_code conversion (unsigned int num, unsigned int degree_of_two, char** res
 
 int main () {
     char *res;
-    unsigned int n = 123, degree;
+    int otr = 0;
+    unsigned int degree;
+    long long int n = -123;
+
+    if (n < 0) {
+        bit_sum(~n, 1, &n);
+        otr = 1;
+    }
 
     for (degree = 1; degree < 6; degree++) {
         if (conversion(n, degree, &res) == OK) {
-
+            if (otr) {
+                printf("-");
+            }
             for(int i = 0; i < 33; i++) {
                 if (res[i] != 0) {
                     printf("%c", res[i]);
