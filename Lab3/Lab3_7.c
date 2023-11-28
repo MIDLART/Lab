@@ -611,7 +611,7 @@ status_code change_interface (Liver** liver, Modif_list* list, List* livers)
     }
     else
     {
-        if (scanf("%s", buf) != 1)
+        if (scanf("%s", buf) != 1 || buf[Name_size - 1] != '\0')
         {
             return INVALID_ARG;
         }
