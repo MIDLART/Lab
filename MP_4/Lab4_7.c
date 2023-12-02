@@ -11,7 +11,8 @@ typedef enum
     OK,
     INVALID_ARG,
     MEM_NOT_ALLOC,
-    NOT_OPEN_FILE
+    NOT_OPEN_FILE,
+    DIV_0
 } status_code;
 
 typedef struct
@@ -106,6 +107,37 @@ status_code print_all (Vector* vec)
     return OK;
 }
 
+// status_code find (Vector* vec, char* name, MemoryCell** res)
+// {
+//     int a = 0, b = vec->size - 1, c, cmp;
+//     c = b / 2;
+//     while (b > a)
+//     {
+//         cmp = strcmp(name, vec->elems[c]->name);
+//         if (cmp == 0)
+//         {
+//             *res = vec->elems[c];
+//             return OK;
+//         }
+//         else if (cmp > 0)
+//         {
+//             a = c + 1;
+//         }
+//         else
+//         {
+//             b = c;
+//         }
+//         c = (a + b) / 2;
+//     }
+//     if (strcmp(name, vec->elems[c]->name) == 0)
+//     {
+//         *res = vec->elems[c];
+//         return OK;
+//     }
+
+//     return INVALID_ARG;
+// }
+
 status_code find (Vector* vec, char* name, int* res)
 {
     int a = 0, b = vec->size - 1, c, cmp;
@@ -197,6 +229,11 @@ status_code read_value (char* str, int* k, long long int* res, Vector* vec)
     }
     else if (isalpha(str[*k]))
     {
+        if (vec->size == 0)
+        {
+            return INVALID_ARG;
+        }
+
         int i = 0;
         while (isalpha(str[*k]))
         {
@@ -249,7 +286,7 @@ status_code operation (char op, long long int *num_1_res, long long int num_2)
             *num_1_res = *num_1_res * num_2;
             break;
         case '/':
-            if (num_2 == 0) return INVALID_ARG;
+            if (num_2 == 0) return DIV_0;
             *num_1_res = *num_1_res / num_2;
             break;
         case '%':
@@ -393,11 +430,12 @@ status_code read_operation (char* str, Vector* vec)
             return status;
         }
 
-        if (operation(op, &(var->value), res) == INVALID_ARG)
+        status_code status_2;
+        if ((status_2 = operation(op, &(var->value), res)) != OK)
         {
             free(name);
             free(var);
-            return INVALID_ARG;
+            return status_2;
         }
     }
 
@@ -536,6 +574,11 @@ int main (int argc, char* argv[])
     {
         printf("Memory was not allocated\n");
     }
+    else if (status == DIV_0)
+    {
+        printf("Division by 0\n");
+    }
+    
     
     del_vec(vector);
     free(vector);
