@@ -143,6 +143,8 @@ status_code free_all (List* polynom_1, List* polynom_2, List* adder) {
 
 status_code test_print (List* polynom_1, List* polynom_2, char* op) {
     printf("%s\n", op);
+    
+    int flag_1 = 1, flag_2 = 1;
 
     polynom* cur = polynom_1->head;
     while (cur != NULL) {
@@ -152,8 +154,13 @@ status_code test_print (List* polynom_1, List* polynom_2, char* op) {
             } else {
                 printf("%d", cur->k);
             }
+            flag_1 = 0;
         }
         cur = cur->next;
+    }
+
+    if (flag_1) {
+        printf("0");
     }
     printf("\n");
     
@@ -168,8 +175,13 @@ status_code test_print (List* polynom_1, List* polynom_2, char* op) {
             } else {
                 printf("%d", cur->k);
             }
+            flag_2 = 0;
         }
         cur = cur->next;
+    }
+
+    if (flag_1) {
+        printf("0");
     }
     printf("\n");
 
@@ -541,21 +553,29 @@ status_code cmps (List* polynom_1, List* polynom_2, List* res) {
     }
 
     while (cur != NULL) {
-        if (fast_exp(polynom_2, cur->n, res_1) == MEM_NOT_ALLOC) {
-            del_list(res_1);
-            free(res_1);
-            return MEM_NOT_ALLOC;
-        }
-
-        polynom* cur_r = res_1->head;
-        while (cur_r != NULL) {
-            if (insert(res, cur_r->k * cur->k, cur_r->n) == MEM_NOT_ALLOC) {
+        if (cur->n != 0) {
+            if (fast_exp(polynom_2, cur->n, res_1) == MEM_NOT_ALLOC) {
                 del_list(res_1);
                 free(res_1);
                 return MEM_NOT_ALLOC;
             }
 
-            cur_r = cur_r->next;
+            polynom* cur_r = res_1->head;
+            while (cur_r != NULL) {
+                if (insert(res, cur_r->k * cur->k, cur_r->n) == MEM_NOT_ALLOC) {
+                    del_list(res_1);
+                    free(res_1);
+                    return MEM_NOT_ALLOC;
+                }
+
+                cur_r = cur_r->next;
+            }
+        } else {
+            if (insert(res, cur->k, 0) == MEM_NOT_ALLOC) {
+                del_list(res_1);
+                free(res_1);
+                return MEM_NOT_ALLOC;
+            }
         }
 
         cur = cur->next;
