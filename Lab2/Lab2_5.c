@@ -123,6 +123,62 @@ status_code check (char c, int system, char reg) {
     return ok;
 }
 
+status_code Conversion_10_to_system (char *str_num, int num, int system, int* len) {
+    int i = 64, otr = 0;
+    char character;
+    if (num < 0) {
+        num *= -1;
+        otr = 1;
+    }
+    while (num != 0) {
+        character = num % system;
+        if (character > 9) {
+            character += 7;
+        }
+        character += '0';
+
+        str_num[i] = character;
+        num /= system;
+        i--;
+    }
+    if (otr) {
+        str_num[i] = '-';
+        i--;
+    }
+    i++;
+    *len = i;
+
+    return ok;
+}
+
+status_code conversion_10_to_system (char *str_num, int num, int system, int* len) {
+    int i = 64, otr = 0;
+    char character;
+    if (num < 0) {
+        num *= -1;
+        otr = 1;
+    }
+    while (num != 0) {
+        character = num % system;
+        if (character > 9) {
+            character += 39;
+        }
+        character += '0';
+
+        str_num[i] = character;
+        num /= system;
+        i--;
+    }
+    if (otr) {
+        str_num[i] = '-';
+        i--;
+    }
+    i++;
+    *len = i;
+
+    return ok;
+}
+
 status_code conv_to_dec (char* buf, char num[], int num_system) {
     if (num_system < 2 || num_system > 36) {
         num_system = 10;
@@ -246,6 +302,36 @@ int overfprintf (FILE* stream, const char* format, ...) {
                 fputc('1', stream);
                 free(res);
 
+                char_record += 1;
+                i += 2;
+            
+            } else if (format[i + 1] == 'C' && format[i + 2] == 'v') {
+                int num = va_arg(args, int);
+                int system = va_arg(args, int);
+                int len;
+                if (conversion_10_to_system(buf, num, system, &len) != ok) {
+                    return -1;
+                }
+
+                for (int l = len; l < 65; l++) {
+                    fputc(buf[l], stream);
+                    char_record++;
+                }
+                char_record += 1;
+                i += 2;
+
+            } else if (format[i + 1] == 'C' && format[i + 2] == 'V') {
+                int num = va_arg(args, int);
+                int system = va_arg(args, int);
+                int len;
+                if (Conversion_10_to_system(buf, num, system, &len) != ok) {
+                    return -1;
+                }
+
+                for (int l = len; l < 65; l++) {
+                    fputc(buf[l], stream);
+                    char_record++;
+                }
                 char_record += 1;
                 i += 2;
 
@@ -382,6 +468,34 @@ int oversprintf (char* res_buf, const char* format, ...) {
                 char_record++;
                 i += 2;
 
+             } else if (format[i + 1] == 'C' && format[i + 2] == 'v') {
+                int num = va_arg(args, int);
+                int system = va_arg(args, int);
+                int len;
+                if (conversion_10_to_system(buf, num, system, &len) != ok) {
+                    return -1;
+                }
+
+                for (int l = len; l < 65; l++) {
+                    res_buf[char_record] = buf[l];
+                    char_record++;
+                }
+                i += 2;
+
+            } else if (format[i + 1] == 'C' && format[i + 2] == 'V') {
+                int num = va_arg(args, int);
+                int system = va_arg(args, int);
+                int len;
+                if (Conversion_10_to_system(buf, num, system, &len) != ok) {
+                    return -1;
+                }
+
+                for (int l = len; l < 65; l++) {
+                    res_buf[char_record] = buf[l];
+                    char_record++;
+                }
+                i += 2;
+
             } else if (format[i + 1] == 't' && format[i + 2] == 'o') {
                 char* num = va_arg(args, char*);
                 int system = va_arg(args, int);
@@ -503,14 +617,14 @@ int main () {
     if (overfprintf(file, "%Ro\ncfvghb123\n%Zr\n", 109, 25) == -1) {
         printf("Error\n");
     }
-    if (overfprintf(file, "%to\n%TO\n", "a", 16, "ABCZ", 36) == -1) {
+    if (overfprintf(file, "%to\n%TO\n\n%Cv\n%CV\n\n", "a", 16, "ABCZ", 36, 10, 16, 36, 36) == -1) {
         printf("Error\n");
     }
     int a = 12345678;
     unsigned int b = 123;
     double d = 12323.4567;
     float f = 0.5;
-    if (overfprintf(file, "%mi\n%mu\n%md\n%mf\n", a, b, d, f) == -1) {
+    if (overfprintf(file, "%mi\n%mu\n%md\n%mf\n", a, b, d, (float)f) == -1) {
         printf("Error\n");
     }
 
