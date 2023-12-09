@@ -107,39 +107,13 @@ status_code print_all (Vector* vec)
     return OK;
 }
 
-// status_code find (Vector* vec, char* name, MemoryCell** res)
-// {
-//     int a = 0, b = vec->size - 1, c, cmp;
-//     c = b / 2;
-//     while (b > a)
-//     {
-//         cmp = strcmp(name, vec->elems[c]->name);
-//         if (cmp == 0)
-//         {
-//             *res = vec->elems[c];
-//             return OK;
-//         }
-//         else if (cmp > 0)
-//         {
-//             a = c + 1;
-//         }
-//         else
-//         {
-//             b = c;
-//         }
-//         c = (a + b) / 2;
-//     }
-//     if (strcmp(name, vec->elems[c]->name) == 0)
-//     {
-//         *res = vec->elems[c];
-//         return OK;
-//     }
-
-//     return INVALID_ARG;
-// }
-
 status_code find (Vector* vec, char* name, int* res)
 {
+    if (vec->size == 0)
+    {
+        return INVALID_ARG;
+    }
+    
     int a = 0, b = vec->size - 1, c, cmp;
     c = b / 2;
     while (b > a)
