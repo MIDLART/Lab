@@ -472,7 +472,7 @@ void depth(Node *root, int* cur, int* max)
     (*cur)--;
 }
 
-void to_file(FILE* file, Node *root, char* sep) 
+void to_file(FILE* file, Node *root, char sep) 
 {
     if (root == NULL) 
     {
@@ -502,7 +502,7 @@ status_code interface (FILE* input, Node* tree, char sep)
 
     while (e) 
     {
-        printf("Enter:\ne - exit\nf - find\nm - min\nM - max\nс - find most common\nd - depth\np - to file\nr - read tree\n");
+        printf("Enter:\ne - exit\nf - find\nm - min\nM - max\nc - find most common\nd - depth\np - to file\nr - read tree\n");
 
         if (scanf("%c", &ent) != 1)
         {
@@ -606,7 +606,7 @@ status_code interface (FILE* input, Node* tree, char sep)
 
                 if (tree != NULL)
                 {
-                    to_file(out, tree, 0);
+                    to_file(out, tree, sep);
                 }
 
                 dell_tree(tree);
@@ -697,11 +697,11 @@ int main (int argc, char* argv[])
 
     qsort(separators->elems, separators->size, sizeof(char), comparator);
 
-    // for (int i = 0; i < separators->size; i++)
-    // {
-    //     printf("%c ", separators->elems[i]);
-    // }
-    // printf("\n");
+    for (int i = 0; i < separators->size; i++)
+    {
+        printf("%c ", separators->elems[i]);
+    }
+    printf("\n");
 
 
     FILE* file = fopen(argv[1], "r");
