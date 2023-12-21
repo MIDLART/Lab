@@ -20,6 +20,14 @@ double function_3 (double x) {
 }
 
 status_code dichotomy (double *res, double a, double b, double EPS, double (*function)(double)) {
+    if (a >= b) {
+        return invalid_arguments;
+    }
+
+    if (function(a) * function(b) > 0) {
+        return invalid_arguments;
+    }
+
     double c = 0;
     while (fabs(b - a) > EPS) {
         c = (b + a)/2;
