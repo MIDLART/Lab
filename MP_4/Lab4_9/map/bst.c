@@ -1,17 +1,3 @@
-typedef struct bst_node
-{
-    char* key;
-    struct bst_node* left;
-    struct bst_node* right;
-    Department* dep;
-} bst_node;
-
-typedef struct BST
-{
-    bst_node* root;
-} BST;
-
-
 status_code bst_node_construct(bst_node** node, const char* key, Department* dep)
 {
     if (node == NULL)
