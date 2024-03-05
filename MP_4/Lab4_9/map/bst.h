@@ -1,3 +1,9 @@
+#ifndef _BST_H_
+#define _BST_H_
+
+#include "utility.h"
+#include "department.h"
+
 typedef struct bst_node
 {
     char* key;
@@ -22,3 +28,5 @@ status_code bst_contains(BST* tree, const char* key, int* is_contained);
 status_code bst_get(BST* tree, const char* key, Department** dep);
 status_code bst_erase(BST* tree, const char* key);
 void print_tree(bst_node *node, int tab);
+
+#endif // _BST_H_
