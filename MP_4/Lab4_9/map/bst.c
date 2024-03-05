@@ -1,3 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "bst.h"
+
 status_code bst_node_construct(bst_node** node, const char* key, Department* dep)
 {
     if (node == NULL)
