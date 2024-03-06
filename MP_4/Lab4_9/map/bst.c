@@ -133,6 +133,7 @@ status_code bst_insert(BST* tree, const char* key, Department* dep)
                 if (cur->left == NULL)
                 {
                     status = bst_node_construct(&cur->left, key, dep);
+                    break;
                 }
 
                 cur = cur->left;
@@ -142,6 +143,7 @@ status_code bst_insert(BST* tree, const char* key, Department* dep)
                 if (cur->right == NULL)
                 {
                     status = bst_node_construct(&cur->right, key, dep);
+                    break;
                 }
 
                 cur = cur->right;
