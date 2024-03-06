@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "array.h"
+
 int arr_comparator (const void* e_1, const void* e_2) 
 {
     arr_elem* e1 = *(arr_elem**) e_1;
