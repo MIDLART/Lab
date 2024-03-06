@@ -273,9 +273,9 @@ status_code bst_del_node (bst_node** del_node)
             new_node = new_node->left;
         }
 
-        prev->left = new_node->right;
-
         new_node->left = node->left;
+        prev->left = new_node->right;
+        
         if (node->right != new_node)
         {
             new_node->right = node->right;
