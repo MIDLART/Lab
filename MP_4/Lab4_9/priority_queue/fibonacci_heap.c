@@ -195,6 +195,36 @@ status_code fib_heap_meld(fib_heap* res, fib_heap* heap_l, fib_heap* heap_r)
 	res->compare = heap_l->compare;
 	res->size = heap_l->size + heap_r->size;
 
+	if (res == heap_l || res == heap_r)
+	{
+		fib_heap res_heap;
+		fib_heap_construct(&res_heap, heap_l->compare);
+		
+		status_code status = fib_heap_meld(&res_heap, heap_l, heap_r);
+		res->head = (&res_heap)->head;
+
+		(&res_heap)->head = NULL;
+		fib_heap_destruct(&res_heap);
+
+		return status;
+	}
+
+	if (heap_l->head == NULL && heap_r->head == NULL)
+	{
+		res->head = NULL;
+		return OK;
+	}
+	else if (heap_l->head == NULL)
+	{
+		res->head = heap_r->head;
+		return OK;
+	}
+	else if (heap_r->head == NULL)
+	{
+		res->head = heap_l->head;
+		return OK;
+	}
+
 	fib_node* second;
 
 	if (heap_l->compare(heap_l->head->req, heap_r->head->req) == -1)
