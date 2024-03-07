@@ -111,6 +111,11 @@ status_code arr_insert (Array* arr, const char* key, Department* dep)
 
     if (comp == 0)
     {
+        for (int i = ind + 1; i < arr->size; ++i)
+        {
+            arr->elems[i] = arr->elems[i + 1];
+        }
+
         return BAD_ACCESS;
     }
 
