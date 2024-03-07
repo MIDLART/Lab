@@ -4,15 +4,6 @@
 
 #include "array.h"
 
-int arr_comparator (const void* e_1, const void* e_2) 
-{
-    arr_elem* e1 = *(arr_elem**) e_1;
-    arr_elem* e2 = *(arr_elem**) e_2;
-
-    return strcmp(e1->key, e2->key);
-}
-
-
 status_code arr_elem_construct(arr_elem** elem, const char* key, Department* dep)
 {
     if (key == NULL || dep == NULL)
@@ -52,7 +43,6 @@ status_code arr_construct (Array* arr)
 {
     arr->size = 0;
     arr->capacity = 8;
-    arr->sorted = 1;
 
     arr->elems = (arr_elem**)malloc(sizeof(arr_elem*) * arr->capacity);
     if (arr->elems == NULL) 
@@ -71,7 +61,6 @@ status_code arr_destruct (Array* arr)
     }
 
     free(arr->elems);
-    free(arr);
 }
 
 status_code arr_set_null (Array* arr)
@@ -84,7 +73,6 @@ status_code arr_set_null (Array* arr)
     arr->elems = NULL;
     arr->size = 0;
     arr->capacity = 0;
-    arr->sorted = 0;
 
     return OK;
 }
@@ -111,9 +99,23 @@ status_code arr_insert (Array* arr, const char* key, Department* dep)
         }
         arr->elems = tmp;
     }
-    arr->elems[arr->size++] = elem;
 
-    arr->sorted = 0;
+    int ind = arr->size - 1;
+    int comp;
+
+    while (ind >= 0 && (comp = strcmp(elem->key, arr->elems[ind]->key)) < 0)
+    {
+        arr->elems[ind + 1] = arr->elems[ind];
+        ind--;
+    }
+
+    if (comp == 0)
+    {
+        return BAD_ACCESS;
+    }
+
+    arr->elems[ind + 1] = elem;
+    arr->size++;
 
     return OK;
 }
@@ -133,12 +135,6 @@ status_code arr_dich_search (Array* arr, const char* key, int* res)
     if (arr->size == 0)
     {
         return INVALID_ARG;
-    }
-
-    if (!arr->sorted)
-    {
-        qsort(arr->elems, arr->size, sizeof(arr_elem*), arr_comparator);
-        arr->sorted = 1;
     }
     
     int a = 0, b = arr->size - 1, c, cmp;
@@ -223,18 +219,12 @@ status_code arr_erase(Array* arr, const char* key)
 
     status_code status = OK;
 
+    arr_elem_destruct(arr->elems[ind]);
     for (int i = ind; i < arr->size - 1; ++i)
     {
-        arr_elem_destruct(arr->elems[i]);
-
-        status = arr_elem_construct(&arr->elems[i], arr->elems[i + 1]->key, arr->elems[i + 1]->dep);
-        if (status != OK)
-        {
-            return status;
-        }
+        arr->elems[i] = arr->elems[i + 1];
     }
-
-    arr_elem_destruct(arr->elems[arr->size - 1]);
+    
     arr->size--;
 
     return OK;
