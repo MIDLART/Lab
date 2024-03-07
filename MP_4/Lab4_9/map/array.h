@@ -15,7 +15,6 @@ typedef struct Array
     arr_elem** elems;
     size_t size;
     size_t capacity;
-    int sorted;
 } Array;
 
 
