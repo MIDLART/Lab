@@ -126,6 +126,8 @@ status_code bst_insert(BST* tree, const char* key, Department* dep)
             comp = strcmp(key, cur->key);
             if (comp == 0)
             {
+                //department_destruct((*node)->dep);
+
                 return BAD_ACCESS;
             }
             else if (comp < 0)
