@@ -116,6 +116,8 @@ status_code arr_insert (Array* arr, const char* key, Department* dep)
             arr->elems[i] = arr->elems[i + 1];
         }
 
+        arr_elem_destruct(elem);
+
         return BAD_ACCESS;
     }
 
