@@ -24,7 +24,7 @@ status_code fib_node_destruct(fib_node* node);
 status_code fib_node_copy(fib_node** dest_p, const fib_node* src);
 
 status_code fib_heap_construct(fib_heap* heap, int (*compare)(const request*, const request*));
-status_code fib_heap_destruct(fib_heap* heap)
+status_code fib_heap_destruct(fib_heap* heap);
 status_code fib_heap_set_null(fib_heap* heap);
 status_code fib_heap_copy(fib_heap* dest, const fib_heap* src);
 
